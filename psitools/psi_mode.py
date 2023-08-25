@@ -29,6 +29,7 @@ except ImportError as error:
     print('Will run despite error importing matplotlib:', error)
 
 from . import psi_dispersion as psid
+from . import magnetisedpsi_dispersion as mpsid
 from . import complex_roots as cr
 
 def guess_domain_size(x):
@@ -64,6 +65,7 @@ class PSIMode():
                  sound_speed_over_eta=1/0.05,
                  size_distribution_power=3.5,
                  single_size_flag=False,
+                 mhd=False,
                  n_sample=20,
                  max_zoom_domains=1,
                  verbose_flag=False,
@@ -74,13 +76,24 @@ class PSIMode():
                  tanhsinh_integrator=None):
         # If dispersion relation is given by f(w)=0, this function calculates
         # the function f(w).
-        self.dispersion = psid.PSIDispersion(dust_to_gas_ratio,
-                                             stokes_range,
-                                             sound_speed_over_eta,
-                                             size_distribution_power,
-                                             single_size_flag,
-                                             size_density,
-                                             tanhsinh_integrator).calculate
+        if mhd:
+             self.dispersion = mhdpsid.MHDPSIDispersion(dust_to_gas_ratio,
+                                                 stokes_range,
+                                                 sound_speed_over_eta,
+                                                 size_distribution_power,
+                                                 single_size_flag,
+                                                 size_density,
+                                                 tanhsinh_integrator).calculate
+
+        else:
+            self.dispersion = psid.PSIDispersion(dust_to_gas_ratio,
+                                                 stokes_range,
+                                                 sound_speed_over_eta,
+                                                 size_distribution_power,
+                                                 single_size_flag,
+                                                 size_density,
+                                                 tanhsinh_integrator).calculate
+
         # Create rectangular domain
         self.domain = cr.Rectangle(real_range, imag_range)
         self.n_sample = n_sample
