@@ -198,7 +198,7 @@ class MHDPSIDispersion():
         xi_yy=-Bz*self.kz
         xi_yz=0
         xi_zx=0
-        xi_zy=-By*kz
+        xi_zy=-By*self.kz
         xi_zz=0
         return np.asarray([[xi_xx, xi_xy, xi_xz], [xi_yx, xi_yy, xi_yz], [xi_zx, xi_zy, xi_zz]])
     
@@ -206,7 +206,7 @@ class MHDPSIDispersion():
         """Matrix inv(K)*N"""
         By,Bz=self.B
         Bdotk=Bz*self.kz
-        denominator=w-self.vgx*self.kx+self.vgz*self.kz
+        denominator=w-self.vgx*self.kx
         Omega=-3/2
         KNxx=Bdotk*denominator
         KNxy=0
@@ -217,11 +217,11 @@ class MHDPSIDispersion():
         KNzx=-1*Bz*self.kx*denominator
         KNzy=0
         KNzz=0
-        return np.asarray([[KN_xx, KN_xy, KN_xz], [KN_yx, KN_yy, KN_yz], [KN_zx, KN_zy, KN_zz]])
+        return np.asarray([[KNxx, KNxy, KNxz], [KNyx, KNyy, KNyz], [KNzx, KNzy, KNzz]])
 
     def matrix_xiKN(self,w):
         """Matrix xi*inv(K)*N"""
-        return self.matrix_xi(w)*self.matrix_kN(w) 
+        return self.matrix_xi(w)*self.matrix_KN(w) 
 
     def matrix_P(self, w):
         """Matrix P: linear gas momentum equation, excluding drag terms,
@@ -409,14 +409,14 @@ class MHDPSIDispersion():
 
         return np.asarray([[m11, m12, m13], [m21, m22, m23], [0, 0, m33]])
 
-    def calculate(self, w, wave_number_x, wave_number_z, plasma_beta=(0,0), viscous_alpha=0):
+    def calculate(self, w, wave_number_x, wave_number_z, inv_plasma_beta=(0,0), viscous_alpha=0):
         """If the dispersion relation is f(w) = 0, this function calculates f at w.
 
         Args:
             w: Complex frequency at which to evaluate the dispersion relation
             wave_number x: Dimensionless wave number (YG05) in x
             wave_number_z: Dimensionless wave number (YG05) in z
-            plasma_beta {tuple(real,real)} (optional):plasma beta y and z (no magnetic field possible in x) 
+            inv_plasma_beta {tuple(real,real)} (optional):1/plasma beta y and z (no magnetic field possible in x) 
             viscous_alpha (optional): Background turbulent gas viscosity parameter. Defaults to zero.
         """
         # Lazy; avoids passing wave numbers to all functions
@@ -428,8 +428,7 @@ class MHDPSIDispersion():
         self.D = lambda x: (1 + x + 4*x*x)*self.nu/(1 + x*x)**2
 
         # B field
-        self.By = np.sqrt(self.self.c**2/plasma_beta[0])
-        self.Bz = np.sqrt(self.self.c**2/plasma_beta[1])
+        self.B = (np.sqrt(inv_plasma_beta[0]/self.c**2),np.sqrt(inv_plasma_beta[1]/self.c**2))
 
         # Make sure we can handle both vector and scalar w
         w = np.asarray(w)

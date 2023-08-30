@@ -156,7 +156,7 @@ class RationalApproximation():
         # Add a maximum of nodes that is half the amount of sample points
         # Break if residual norm small enough.
         max_norm = 1.0e10
-        for m in range(1, np.int(len(self.F)/2)):
+        for m in range(1, int(len(self.F)/2)):
             new_norm = self.step()
             if (new_norm < self.tol):
                 break

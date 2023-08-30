@@ -77,7 +77,7 @@ class PSIMode():
         # If dispersion relation is given by f(w)=0, this function calculates
         # the function f(w).
         if mhd:
-             self.dispersion = mhdpsid.MHDPSIDispersion(dust_to_gas_ratio,
+             self.dispersion = mpsid.MHDPSIDispersion(dust_to_gas_ratio,
                                                  stokes_range,
                                                  sound_speed_over_eta,
                                                  size_distribution_power,
@@ -119,7 +119,7 @@ class PSIMode():
                                            tol=tol,
                                            clean_tol=clean_tol)
 
-    def calculate(self, wave_number_x, wave_number_z, viscous_alpha=0, plasma_beta=(0,0),
+    def calculate(self, wave_number_x, wave_number_z, viscous_alpha=0, inv_plasma_beta=(0,0),
                   guess_roots=[], count_roots=False):
         """Calculate complex mode frequency at wave number Kx and Kz and viscosity parameter viscous_alpha.
 
@@ -134,7 +134,7 @@ class PSIMode():
             self.disp = lambda z: self.dispersion(z,
                                                 wave_number_x,
                                                 wave_number_z,
-                                                plasma_beta,
+                                                inv_plasma_beta,
                                                 viscous_alpha)
         else:
             self.disp = lambda z: self.dispersion(z,
@@ -173,10 +173,10 @@ class PSIMode():
                 self.ra.calculate(self.f_sample, self.z_sample)
             except:
                 print(('Rational approximation failed at Kx = {}, Kz = {}, '
-                      'alpha = {}, plasma_beta = {}, guess_roots = {}').format(wave_number_x,
+                      'alpha = {}, inv_plasma_beta = {}, guess_roots = {}').format(wave_number_x,
                                                              wave_number_z,
                                                              viscous_alpha,
-                                                             plasma_beta,
+                                                             inv_plasma_beta,
                                                              guess_roots))
                 raise
 
@@ -185,10 +185,10 @@ class PSIMode():
                 zeros = self.ra.find_zeros()
             except:
                 print(('Roots of RA failed at Kx = {}, Kz = {}, '
-                      'alpha = {}, plasma_beta = {}, guess_roots = {}').format(wave_number_x,
+                      'alpha = {}, inv_plasma_beta = {}, guess_roots = {}').format(wave_number_x,
                                                              wave_number_z,
                                                              viscous_alpha,
-                                                             plasma_beta,
+                                                             inv_plasma_beta,
                                                              guess_roots))
                 raise
 
@@ -219,10 +219,10 @@ class PSIMode():
                     self.ra.calculate(self.f_sample, self.z_sample)
                 except:
                     print(('Rational approximation failed at Kx = {}, Kz = {}, '
-                           'alpha = {}, plasma_beta = {}, guess_roots = {}').format(wave_number_x,
+                           'alpha = {}, inv_plasma_beta = {}, guess_roots = {}').format(wave_number_x,
                                                                   wave_number_z,
                                                                   viscous_alpha,
-                                                                  plasma_beta,
+                                                                  inv_plasma_beta,
                                                                   guess_roots))
                     raise
 
@@ -231,10 +231,10 @@ class PSIMode():
                     zeros = self.ra.find_zeros()
                 except:
                     print(('Roots of RA failed at Kx = {}, Kz = {}, '
-                           'alpha = {}, plasma_beta = {}, guess_roots = {}').format(wave_number_x,
+                           'alpha = {}, inv_plasma_beta = {}, guess_roots = {}').format(wave_number_x,
                                                                   wave_number_z,
                                                                   viscous_alpha,
-                                                                  plasma_beta,
+                                                                  inv_plasma_beta,
                                                                   guess_roots))
                     raise
 
@@ -251,10 +251,10 @@ class PSIMode():
                 zeros = self.ra.find_zeros()
             except:
                 print(('Roots of RA failed at Kx = {}, Kz = {}, '
-                       'alpha = {}, plasma_beta = {}, guess_roots = {}').format(wave_number_x,
+                       'alpha = {}, inv_plasma_beta = {}, guess_roots = {}').format(wave_number_x,
                                                                   wave_number_z,
                                                                   viscous_alpha,
-                                                                  plasma_beta,
+                                                                  inv_plasma_beta,
                                                                   guess_roots))
                 raise
 
@@ -519,7 +519,7 @@ class PSIMode():
         return np.reshape(ret, original_shape)
 
     def plot_dispersion(self, wave_number_x, wave_number_z,
-                        viscous_alpha=0,plasma_beta=(0,0),
+                        viscous_alpha=0,inv_plasma_beta=(0,0),
                         N=100, show_exact=False, x=None, y=None):
         """Plot the approximate dispersion relation over the whole domain, and, possibly, the exact dispersion relation to compare (*very* expensive).
 
@@ -543,7 +543,7 @@ class PSIMode():
         if show_exact == True:
             if self.mhd:
                 f_exact = self.dispersion(z, wave_number_x, wave_number_z,
-                                          viscous_alpha=viscous_alpha,plasma_beta=plasma_beta)
+                                          viscous_alpha=viscous_alpha,inv_plasma_beta=inv_plasma_beta)
             else:
                 f_exact = self.dispersion(z, wave_number_x, wave_number_z,
                                           viscous_alpha=viscous_alpha)
