@@ -221,7 +221,7 @@ class MHDPSIDispersion():
 
     def matrix_xiKN(self,w):
         """Matrix xi*inv(K)*N"""
-        return self.matrix_xi(w)*self.matrix_KN(w) 
+        return self.matrix_xi(w)@self.matrix_KN(w) 
 
     def matrix_P(self, w):
         """Matrix P: linear gas momentum equation, excluding drag terms,
