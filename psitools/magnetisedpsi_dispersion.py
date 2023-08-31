@@ -200,7 +200,7 @@ class MHDPSIDispersion():
         xi_zx=0
         xi_zy=-By*self.kz
         xi_zz=0
-        return np.asarray([[xi_xx, xi_xy, xi_xz], [xi_yx, xi_yy, xi_yz], [xi_zx, xi_zy, xi_zz]])
+        return (1./4.*np.pi)*np.asarray([[xi_xx, xi_xy, xi_xz], [xi_yx, xi_yy, xi_yz], [xi_zx, xi_zy, xi_zz]])
     
     def matrix_KN(self,w):
         """Matrix inv(K)*N"""
