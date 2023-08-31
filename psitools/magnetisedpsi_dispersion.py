@@ -189,7 +189,10 @@ class MHDPSIDispersion():
         return self.average(g)
 
     def matrix_xi(self, w):
-        """ Matrix Xi"""
+        """ 
+        Matrix Xi
+        see [ivg... , iB] terms in monodisperse_si_mri.py
+        """
         By,Bz=self.B
         xi_xx=-Bz*self.kz
         xi_xy=By*self.kx
