@@ -206,8 +206,8 @@ class MHDPSIDispersion():
         """Matrix inv(K)*N"""
         By,Bz=self.B
         Bdotk=Bz*self.kz
-        denominator=1/w-self.vgx*self.kx
-        Omega=-3/2
+        denominator=1.0/(w-self.vgx*self.kx)
+        Omega=1
         KNxx=Bdotk*denominator
         KNxy=0
         KNxz=0
