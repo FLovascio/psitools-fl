@@ -198,7 +198,7 @@ class MHDPSIDispersion():
         xi_yy=-Bz*self.kz
         xi_yz=0
         xi_zx=0
-        xi_zy=-By*self.kz
+        xi_zy=By*self.kz
         xi_zz=0
         return (1./4.*np.pi)*np.asarray([[xi_xx, xi_xy, xi_xz], [xi_yx, xi_yy, xi_yz], [xi_zx, xi_zy, xi_zz]])
     
