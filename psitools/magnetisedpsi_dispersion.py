@@ -431,7 +431,8 @@ class MHDPSIDispersion():
         self.D = lambda x: (1 + x + 4*x*x)*self.nu/(1 + x*x)**2
 
         # B field
-        self.B = (np.sqrt(inv_plasma_beta[0]/self.c**2),np.sqrt(inv_plasma_beta[1]/self.c**2))
+        mu0=1.2566370621219e-6
+        self.B = (np.sqrt(2.0*mu0*inv_plasma_beta[0]*self.c**2),np.sqrt(2.0*mu0*inv_plasma_beta[1]*self.c**2))
 
         # Make sure we can handle both vector and scalar w
         w = np.asarray(w)
